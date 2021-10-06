@@ -6,6 +6,8 @@ import { Shapes, Categories, Box } from "../components/shape";
 import state from "../components/store";
 
 import About from "../components/about";
+import Work from "../components/work";
+import Contact from "../components/contact";
 
 function HtmlContent({ className, style, children, portal }) {
   const { size } = useThree();
@@ -79,14 +81,14 @@ export default function App() {
         <Block factor={1.5} offset={2}>
           <Box />
           <Html center portal={domContent}>
-            <h2>section 2</h2>
+            <Work></Work>
           </Html>
         </Block>
 
         <Block factor={-2} offset={4}>
           <Box scale={[2, 2, 2]} />
           <Html center portal={domContent}>
-            <h2>section 3</h2>
+            <Contact></Contact>
           </Html>
         </Block>
       </Canvas>
