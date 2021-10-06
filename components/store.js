@@ -1,10 +1,10 @@
-import { createRef } from "react"
+import { createRef } from "react";
 
 const state = {
   sections: 5,
   pages: 3,
   zoom: 1,
   top: createRef(),
-}
+};
 
-export default state
+export default state;

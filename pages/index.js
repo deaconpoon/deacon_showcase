@@ -1,10 +1,11 @@
-import { render } from "react-dom";
 import React, { useState, useEffect, useRef } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import { Block } from "../components/blocks";
 import { Shapes, Categories, Box } from "../components/shape";
 import state from "../components/store";
+
+import About from "../components/about";
 
 function HtmlContent({ className, style, children, portal }) {
   const { size } = useThree();
@@ -35,6 +36,7 @@ export default function App() {
   return (
     <>
       <Canvas
+        style={{ height: `100vh` }}
         colorManagement
         gl={{ alpha: false, antialias: true }}
         camera={{ position: [0, 0, 4.5], fov: 50, near: 0.1, far: 100 }}
@@ -58,11 +60,10 @@ export default function App() {
             </div>
             <div className="jumbo">
               <h1>
-                browser
+                Hello,
                 <br />
-                based
-                <br />
-                modeling.
+                My name is Deacon
+                <br />I am a Design Engineer
               </h1>
             </div>
           </HtmlContent>
@@ -71,7 +72,7 @@ export default function App() {
         <Block factor={1.5} offset={1}>
           <Box />
           <Html center portal={domContent}>
-            <h2>section 1</h2>
+            <About></About>
           </Html>
         </Block>
 
