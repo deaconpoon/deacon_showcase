@@ -56,7 +56,7 @@ function AnimatedTitle({ time = 3000 }) {
         <span
           key={i}
           hidden={i !== index || undefined}
-          className="transition horizontal"
+          className="transition horizontal subTitle"
           style={{ width: "100%", left: 0 }}
         >
           {title}
@@ -93,10 +93,10 @@ export default function App() {
             <div className="menu left" style={{ top: "2.55rem" }}>
               <h2 style={{ fontSize: "2em", top: "4rem" }}>buerli.</h2>
             </div>
-            <div className="menu right">
+            {/*          <div className="menu right">
               <span>Login</span>
               <span>Sign up</span>
-            </div>
+            </div> */}
 
             <div className="jumbo">
               <h1>

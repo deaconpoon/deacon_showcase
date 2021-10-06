@@ -64,6 +64,9 @@ p {
   margin-bottom: 0;
   -webkit-font-smoothing: antialiased;
 }
+a {
+  all: unset;
+}
 
 .page {
   padding: 0 15rem;
@@ -254,13 +257,17 @@ p {
     right: 2rem;
   }
   .jumbo h1 {
-    font-size: 46px;
+    font-size: 36px;
     line-height: 64px;
-    letter-spacing: 16px;
+    letter-spacing: 8px;
     margin-left: 26px;
   }
 }
-
+.subTitle {
+  @media (max-width: 580px) {
+    margin-left: 26px;
+  }
+}
 .scrollArea {
   position: absolute;
   top: 0;
@@ -275,25 +282,29 @@ p {
 }
 
 .container {
-  /*   position: relative;
+  position: absolute;
   top: 50%;
   left: 50%;
+  width: 100%;
   transform: translate3d(-50%, -40%, 0);
   display: flex;
   flex-direction: column;
-  align-items: left; */
-  min-width: 380px;
-  display: flex;
-
+  align-items: left;
+  min-width: 80vw;
   &__wrapper {
     /*     position: absolute;
     left: 0; */
     text-transform: uppercase;
     overflow: auto;
 
+    @media (max-width: 580px) {
+    }
+
     p {
-      /*       font-size: 5vw; */
+      font-size: 5vw;
       @media (max-width: 580px) {
+        margin-left: 26px;
+        margin-right: 26px;
       }
     }
     h1 {
