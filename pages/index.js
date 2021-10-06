@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import { Block } from "../components/blocks";
@@ -9,6 +9,7 @@ import About from "../components/about";
 import Work from "../components/work";
 import Contact from "../components/contact";
 
+//fixed css
 function HtmlContent({ className, style, children, portal }) {
   const { size } = useThree();
   return (
@@ -26,6 +27,42 @@ function HtmlContent({ className, style, children, portal }) {
         {children}
       </div>
     </Html>
+  );
+}
+
+function AnimatedTitle({ time = 3000 }) {
+  const [index, set] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => set((index + 1) % 2), time);
+    return () => clearInterval(interval);
+  }, [index]);
+  const subTitle = useMemo(
+    () => [
+      {
+        adjective: "Empathetic",
+        title: "Product Designer 🎨",
+      },
+      {
+        adjective: "Inquisitive",
+        title: "UX Engineer 💻",
+      },
+    ],
+    []
+  );
+
+  return (
+    <>
+      {subTitle.map(({ title }, i) => (
+        <span
+          key={i}
+          hidden={i !== index || undefined}
+          className="transition horizontal"
+          style={{ width: "100%", left: 0 }}
+        >
+          {title}
+        </span>
+      ))}
+    </>
   );
 }
 
@@ -51,7 +88,7 @@ export default function App() {
         }}
       >
         <Block factor={1.5} offset={0}>
-          <Shapes />
+          {/*           <Shapes /> */}
           <HtmlContent portal={domContent}>
             <div className="menu left" style={{ top: "2.55rem" }}>
               <h2 style={{ fontSize: "2em", top: "4rem" }}>buerli.</h2>
@@ -60,33 +97,35 @@ export default function App() {
               <span>Login</span>
               <span>Sign up</span>
             </div>
+
             <div className="jumbo">
               <h1>
-                Hello,
+                Hello! This is Deacon 👋
                 <br />
-                My name is Deacon
-                <br />I am a Design Engineer
+                I am a
+                <br />
+                <AnimatedTitle />
               </h1>
             </div>
           </HtmlContent>
         </Block>
 
         <Block factor={1.5} offset={1}>
-          <Box />
+          {/*           <Box /> */}
           <Html center portal={domContent}>
             <About></About>
           </Html>
         </Block>
 
         <Block factor={1.5} offset={2}>
-          <Box />
+          {/*    <Box /> */}
           <Html center portal={domContent}>
             <Work></Work>
           </Html>
         </Block>
 
         <Block factor={-2} offset={4}>
-          <Box scale={[2, 2, 2]} />
+          {/*    <Box scale={[2, 2, 2]} /> */}
           <Html center portal={domContent}>
             <Contact></Contact>
           </Html>
