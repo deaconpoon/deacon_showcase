@@ -1,5 +1,6 @@
 import React, { useRef, useMemo, useEffect, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
+import { MeshWobbleMaterial } from "@react-three/drei";
 
 function useWobble(factor = 1, fn = "sin", cb) {
   const ref = useRef();
@@ -30,6 +31,26 @@ export function Box(props) {
         attach="material"
         color={hovered ? "hotpink" : "white"}
       />
+    </mesh>
+  );
+}
+
+export function FunkyBox(props) {
+  const [hovered, set] = useState(false);
+  const ref = useWobble(0.5, "cos");
+  useFrame(
+    () =>
+      (ref.current.rotation.x = ref.current.rotation.y = ref.current.rotation.z += 0.01)
+  );
+  return (
+    <mesh
+      ref={ref}
+      {...props}
+      onPointerOver={() => set(true)}
+      onPointerOut={() => set(false)}
+    >
+      <boxBufferGeometry attach="geometry" />
+      <MeshWobbleMaterial attach="material" color="lightpink" />
     </mesh>
   );
 }
@@ -90,7 +111,7 @@ function Cross(props) {
     <group ref={ref}>
       <group ref={inner} {...props}>
         <mesh>
-          <planeBufferGeometry attach="geometry" args={[2, 0.5]} />
+          <boxBufferGeometry attach="geometry" args={[2, 0.5]} />
           <meshBasicMaterial
             attach="material"
             color="#FFEDDD"
@@ -98,7 +119,7 @@ function Cross(props) {
           />
         </mesh>
         <mesh position={[0, -0.625, 0]}>
-          <planeBufferGeometry attach="geometry" args={[0.5, 0.75]} />
+          <boxBufferGeometry attach="geometry" args={[0.5, 0.75]} />
           <meshBasicMaterial
             attach="material"
             color="#FFEDDD"
@@ -106,7 +127,7 @@ function Cross(props) {
           />
         </mesh>
         <mesh position={[0, 0.625, 0]}>
-          <planeBufferGeometry attach="geometry" args={[0.5, 0.75]} />
+          <boxBufferGeometry attach="geometry" args={[0.5, 0.75]} />
           <meshBasicMaterial
             attach="material"
             color="#FFEDDD"
@@ -124,13 +145,13 @@ function Minus(props) {
     <group ref={ref}>
       <group {...props}>
         <mesh>
-          <planeBufferGeometry attach="geometry" args={[2, 0.7]} />
+          <boxBufferGeometry attach="geometry" args={[0.2, 0.7, 0.7]} />
+
           <meshBasicMaterial
             attach="material"
             color="#DEF5FF"
             toneMapped={false}
-            transparent
-            opacity={0.7}
+            /*      opacity={0.7} */
           />
         </mesh>
       </group>
@@ -141,80 +162,20 @@ function Minus(props) {
 function Lights() {
   return (
     <>
-      <ambientLight intensity={0.2} />
+      {/*       <ambientLight intensity={0.2} />
       <pointLight
         position={[7, -5, 10]}
         intensity={1}
         angle={0.3}
         penumbra={1}
       />
-      <pointLight position={[1, -1, -5]} intensity={0.5} />
+      <pointLight position={[1, -1, -5]} intensity={0.5} /> */}
+      <ambientLight intensity={0.3} />
+      {/* Our main source of light, also casting our shadow */}
+      <directionalLight position={[0, 10, 0]} intensity={1.5} />
+      {/* A light to help illumnate the spinning boxes */}
+      <pointLight position={[-10, 0, -20]} intensity={0.5} />
+      <pointLight position={[0, -10, 0]} intensity={1.5} />
     </>
-  );
-}
-
-export function Categories({ time = 3000 }) {
-  const [index, set] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => set((index + 1) % 2), time);
-    return () => clearInterval(interval);
-  }, [index]);
-  const cats = useMemo(
-    () => [
-      {
-        npm: "headless",
-        description: "programmatic CAD workflow for the web.",
-      },
-      { npm: "react", description: "interactive CAD workflow for React." },
-    ],
-    []
-  );
-
-  const ref = useRef();
-  useEffect(() => {
-    ref.current.style.animation = "none";
-    void ref.current.offsetHeight;
-    ref.current.style.animation = `changewidth ${time / 1000}s linear`;
-  }, [index]);
-
-  return (
-    <p style={{ height: 70 }}>
-      <a href="#" style={{ width: 190 }} onClick={() => set((index + 1) % 2)}>
-        <div
-          ref={ref}
-          className="progress"
-          style={{
-            position: "absolute",
-            left: 0,
-            bottom: 0,
-            height: 2,
-            opacity: 0.5,
-            background: "#ffa5a5",
-          }}
-        />
-        @buerli.io/
-        {cats.map(({ npm }, i) => (
-          <span
-            key={i}
-            hidden={i !== index || undefined}
-            className="transition vertical"
-          >
-            {npm}
-          </span>
-        ))}
-      </a>
-      is a non-manifold,
-      <br />
-      {cats.map(({ description }, i) => (
-        <span
-          key={i}
-          hidden={i !== index || undefined}
-          className="transition horizontal"
-          style={{ width: "100%", left: 0 }}
-        >
-          {description}
-        </span>
-      ))}
-    </p>
   );
 }

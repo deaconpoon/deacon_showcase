@@ -1,19 +1,29 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import Image from "next/image";
 import { Canvas, useThree } from "@react-three/fiber";
-import { Html } from "@react-three/drei";
+import { Html, OrbitControls } from "@react-three/drei";
 import { Block } from "../components/blocks";
-import { Shapes, Categories, Box } from "../components/shape";
+import { Shapes, Box, FunkyBox } from "../components/shape";
 import state from "../components/store";
+import { useInView } from "react-intersection-observer";
 
 import About from "../components/about";
 import Work from "../components/work";
 import Contact from "../components/contact";
+import logo from "../public/logo.svg";
 
 //fixed css
-function HtmlContent({ className, style, children, portal }) {
+function HtmlContent({ className, style, children, portal, bgColor }) {
   const { size } = useThree();
+  const [refItem, inView] = useInView({
+    threshold: 0,
+  });
+  useEffect(() => {
+    inView && (document.body.style.background = bgColor);
+  }, [inView]);
   return (
     <Html
+      fullscreen
       portal={portal}
       style={{
         position: "absolute",
@@ -23,7 +33,7 @@ function HtmlContent({ className, style, children, portal }) {
         height: size.height,
       }}
     >
-      <div className={className} style={style}>
+      <div ref={refItem} className={className} style={style}>
         {children}
       </div>
     </Html>
@@ -88,15 +98,11 @@ export default function App() {
         }}
       >
         <Block factor={1.5} offset={0}>
-          {/*           <Shapes /> */}
+          <Shapes />
           <HtmlContent portal={domContent}>
-            <div className="menu left" style={{ top: "2.55rem" }}>
-              <h2 style={{ fontSize: "2em", top: "4rem" }}>buerli.</h2>
+            <div className="menu left" style={{ top: "1rem" }}>
+              <Image src={logo} alt="Deacon's logo" />
             </div>
-            {/*          <div className="menu right">
-              <span>Login</span>
-              <span>Sign up</span>
-            </div> */}
 
             <div className="jumbo">
               <h1>
@@ -111,25 +117,27 @@ export default function App() {
         </Block>
 
         <Block factor={1.5} offset={1}>
-          {/*           <Box /> */}
-          <Html center portal={domContent}>
+          <Box />
+          <Html bgColor="#f15946" center portal={domContent}>
             <About></About>
           </Html>
         </Block>
 
         <Block factor={1.5} offset={2}>
-          {/*    <Box /> */}
+          <FunkyBox scale={[1.5, 1.5, 1.5]} />
+
           <Html center portal={domContent}>
-            <Work></Work>
+            {/*             <Work></Work> */}
           </Html>
         </Block>
 
         <Block factor={-2} offset={4}>
-          {/*    <Box scale={[2, 2, 2]} /> */}
+          <Box scale={[2, 2, 2]} />
           <Html center portal={domContent}>
             <Contact></Contact>
           </Html>
         </Block>
+        <OrbitControls />
       </Canvas>
 
       <div

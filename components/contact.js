@@ -3,7 +3,11 @@ import React from "react";
 const Contact = () => {
   return (
     <>
-      <h1>hello contact</h1>
+      <div className="container">
+        <div className="container__wrapper">
+          <p className="highlight__yellow">Let's be internet BFFs 👨🏻‍💻👩🏽‍💻</p>
+        </div>
+      </div>
     </>
   );
 };

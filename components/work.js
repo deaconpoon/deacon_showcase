@@ -3,7 +3,11 @@ import React from "react";
 const Work = () => {
   return (
     <>
-      <h1>hello work</h1>
+      <div>
+        <div>
+          <h1>hello work</h1>
+        </div>
+      </div>
     </>
   );
 };
