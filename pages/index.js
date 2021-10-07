@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, Suspense } from "react";
 import Image from "next/image";
 import { Canvas, useThree } from "@react-three/fiber";
-import { Html, OrbitControls } from "@react-three/drei";
+import { Html, useProgress } from "@react-three/drei";
 import { Block } from "../components/blocks";
 import { Shapes, Box, FunkyBox } from "../components/shape";
 import state from "../components/store";
 import { useInView } from "react-intersection-observer";
+import { a, useTransition } from "@react-spring/web";
 
 import About from "../components/about";
 import Work from "../components/work";
@@ -76,6 +77,25 @@ function AnimatedTitle({ time = 3000 }) {
   );
 }
 
+function Loader() {
+  const { active, progress } = useProgress();
+  const transition = useTransition(active, {
+    from: { opacity: 1, progress: 0 },
+    leave: { opacity: 0 },
+    update: { progress },
+  });
+  return transition(
+    ({ progress, opacity }, active) =>
+      active && (
+        <a.div className="loading" style={{ opacity }}>
+          <div className="loading-bar-container">
+            <a.div className="loading-bar" style={{ width: progress }}></a.div>
+          </div>
+        </a.div>
+      )
+  );
+}
+
 export default function App() {
   const [events, setEvents] = useState();
   const domContent = useRef();
@@ -97,49 +117,48 @@ export default function App() {
           setEvents(events);
         }}
       >
-        <Block factor={1.5} offset={0}>
-          <Shapes />
-          <HtmlContent portal={domContent}>
-            <div className="menu left" style={{ top: "1rem" }}>
-              <Image src={logo} alt="Deacon's logo" />
-            </div>
+        <Suspense fallback={null}>
+          <Block factor={1.5} offset={0}>
+            <Shapes />
+            <HtmlContent portal={domContent}>
+              <div className="menu left" style={{ top: "1rem" }}>
+                <Image src={logo} alt="Deacon's logo" />
+              </div>
 
-            <div className="jumbo">
-              <h1>
-                Hello! This is Deacon 👋
-                <br />
-                I am a
-                <br />
-                <AnimatedTitle />
-              </h1>
-            </div>
-          </HtmlContent>
-        </Block>
+              <div className="jumbo">
+                <h1>
+                  Hello! This is Deacon 👋
+                  <br />
+                  I am a
+                  <br />
+                  <AnimatedTitle />
+                </h1>
+              </div>
+            </HtmlContent>
+          </Block>
 
-        <Block factor={1.5} offset={1}>
-          <Box />
-          <Html bgColor="#f15946" center portal={domContent}>
-            <About></About>
-          </Html>
-        </Block>
+          <Block factor={1.5} offset={1}>
+            <Box />
+            <Html bgColor="#f15946" center portal={domContent}>
+              <About></About>
+            </Html>
+          </Block>
 
-        <Block factor={1.5} offset={2}>
-          <FunkyBox scale={[1.5, 1.5, 1.5]} />
+          <Block factor={1.5} offset={2}>
+            <FunkyBox scale={[1.5, 1.5, 1.5]} />
 
-          <Html center portal={domContent}>
-            {/*             <Work></Work> */}
-          </Html>
-        </Block>
+            <Html center portal={domContent}></Html>
+          </Block>
 
-        <Block factor={-2} offset={4}>
-          <Box scale={[2, 2, 2]} />
-          <Html center portal={domContent}>
-            <Contact></Contact>
-          </Html>
-        </Block>
-        <OrbitControls />
+          <Block factor={-2} offset={4}>
+            <Box scale={[2, 2, 2]} />
+            <Html center portal={domContent}>
+              <Contact></Contact>
+            </Html>
+          </Block>
+        </Suspense>
       </Canvas>
-
+      <Loader />
       <div
         className="scrollArea"
         ref={scrollArea}
